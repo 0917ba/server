@@ -145,6 +145,43 @@ def recycle():
     return jsonify({"result": "not found"})
 
 
+@app.route("/alergy", methods=['POST'])
+def alergy():
+    try:
+        imagestring = request.form['imageInfo']
+    except:
+        return jsonify({"result": 'imagestring died'})
+    
+    try:
+        content = base64.b64decode(imagestring)
+    except:
+        return jsonify({"result":'base64 died'})
+    
+    image = vision.Image(content=content)
+
+    response = client.text_detection(image=image)
+    texts = response.text_annotations[0].description
+
+
+    alergy_list = ["난류", "달걀", "우유", "메밀", "땅콩", "대두", "밀", "고등어", "게", "새우", "돼지고기", "복숭아", "토마토", "아황산류", "호두", "닭고기", "쇠고기", "오징어", "조개류", "아몬드", "피스타치오", "호박", "깨", "두릅", "셀러리"]
+    including_alergy = set()
+
+
+    for target_match in re.finditer('함유', texts):
+        target_index = target_match.start()
+
+        target_distance = 30
+        target_start = max(0, target_index - target_distance)
+        target_texts = texts[target_start:target_index]
+
+        for item in alergy_list:
+            if item in target_texts:
+                including_alergy.add(item)
+
+    
+    return jsonify({"result": list(including_alergy)})
+
+
 def return_value(time_array):
     if len(time_array) > 0:
         res_date = max(time_array)
