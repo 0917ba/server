@@ -9,7 +9,7 @@ import time
 
 
 # /home/0917ba2/mysite/celestial-shore-380106-8271a95fb3ec.json
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/0917ba2/mysite/celestial-shore-380106-8271a95fb3ec.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./celestial-shore-380106-8271a95fb3ec.json"
 
 client = vision.ImageAnnotatorClient()
 
