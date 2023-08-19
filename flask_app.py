@@ -178,7 +178,8 @@ def alergy():
             if item in target_texts:
                 including_alergy.add(item)
 
-    
+    if not including_alergy:
+        return jsonify({"result": "not found"})
     return jsonify({"result": list(including_alergy)})
 
 
